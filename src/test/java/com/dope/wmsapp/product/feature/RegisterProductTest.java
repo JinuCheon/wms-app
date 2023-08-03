@@ -1,6 +1,7 @@
 package com.dope.wmsapp.product.feature;
 
 import com.dope.wmsapp.common.ApiTest;
+import com.dope.wmsapp.common.Scenario;
 import com.dope.wmsapp.product.domain.ProductRepository;
 import com.dope.wmsapp.product.feature.api.RegisterProductApi;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +20,10 @@ class RegisterProductTest extends ApiTest {
     @DisplayName("상품을 등록한다.")
     void registerProduct() {
         //given
-        new RegisterProductApi().request();
+        // Scenario.registerProduct().request()
+        //   .registerProduct().request();
+        // 내부에서 scenario를 return하도록 만들어서, 여러번 호출이 가능하다.
+        Scenario.registerProduct().request();
 
         //then
         assertThat(productRepository.findAll()).hasSize(1);

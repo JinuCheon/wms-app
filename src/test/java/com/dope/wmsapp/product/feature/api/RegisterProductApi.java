@@ -1,5 +1,6 @@
 package com.dope.wmsapp.product.feature.api;
 
+import com.dope.wmsapp.common.Scenario;
 import com.dope.wmsapp.product.domain.Category;
 import com.dope.wmsapp.product.domain.TemperatureZone;
 import com.dope.wmsapp.product.feature.RegisterProduct;
@@ -69,7 +70,7 @@ public class RegisterProductApi {
         return this;
     }
 
-    public void request() {
+    public Scenario request() {
         final RegisterProduct.Request request = new RegisterProduct.Request(
                 name,
                 code,
@@ -92,5 +93,7 @@ public class RegisterProductApi {
                 .post("/products")
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
+
+        return new Scenario();
     }
 }
