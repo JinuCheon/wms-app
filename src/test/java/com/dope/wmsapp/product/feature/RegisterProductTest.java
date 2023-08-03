@@ -1,5 +1,6 @@
 package com.dope.wmsapp.product.feature;
 
+import com.dope.wmsapp.common.ApiTest;
 import com.dope.wmsapp.product.domain.Category;
 import com.dope.wmsapp.product.domain.ProductRepository;
 import com.dope.wmsapp.product.domain.TemperatureZone;
@@ -15,21 +16,11 @@ import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class RegisterProductTest {
 
-    @LocalServerPort
-    private int port;
+class RegisterProductTest extends ApiTest {
 
     @Autowired private RegisterProduct registerProduct;
     @Autowired private ProductRepository productRepository;
-
-    @BeforeEach
-    void setUp() {
-        if(RestAssured.UNDEFINED_PORT == RestAssured.port) {
-            RestAssured.port = port;
-        }
-    }
 
     @Test
     @DisplayName("상품을 등록한다.")
