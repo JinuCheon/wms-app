@@ -5,8 +5,20 @@ import com.dope.wmsapp.product.domain.Product;
 import com.dope.wmsapp.product.domain.ProductRepository;
 import com.dope.wmsapp.product.domain.ProductSize;
 import com.dope.wmsapp.product.domain.TemperatureZone;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/products")
 public class RegisterProduct {
     private final ProductRepository productRepository;
 
@@ -14,14 +26,42 @@ public class RegisterProduct {
         this.productRepository = productRepository;
     }
 
-    public void request(final Request request) {
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void request(@RequestBody final Request request) {
         Product product = request.toDomain();
         productRepository.save(product);
     }
 
-    public record Request(String name, String code, String description, String brand, String maker, String origin,
-                          Category category, TemperatureZone temperatureZone, Long weightInGrams,
-                          Long widthInMillimeters, Long heightInMillimeters, Long lengthInMillimeters) {
+    public record Request(
+            @NotBlank(message = "상품명은 필수입니다.")
+            String name,
+            @NotBlank(message = "상품코드는 필수입니다.")
+            String code,
+            @NotBlank(message = "상품설명은 필수입니다.")
+            String description,
+            @NotBlank(message = "브랜드는 필수입니다.")
+            String brand,
+            @NotBlank(message = "제조사는 필수입니다.")
+            String maker,
+            @NotBlank(message = "원산지는 필수입니다.")
+            String origin,
+            @NotBlank(message = "카테고리는 필수입니다.")
+            Category category,
+            @NotBlank(message = "온도대는 필수입니다.")
+            TemperatureZone temperatureZone,
+            @NotBlank(message = "무게는 필수입니다.")
+            @Min(value = 0, message = "무게는 0보다 커야합니다.")
+            Long weightInGrams,
+            @NotBlank(message = "상품사이즈는 필수입니다.")
+            @Min(value = 0, message = "너비는 0보다 커야합니다.")
+            Long widthInMillimeters,
+            @NotBlank(message = "상품사이즈는 필수입니다.")
+            @Min(value = 0, message = "높이는 0보다 커야합니다.")
+            Long heightInMillimeters,
+            @NotBlank(message = "상품사이즈는 필수입니다.")
+            @Min(value = 0, message = "길이는 0보다 커야합니다.")
+            Long lengthInMillimeters) {
         public Request {
             Assert.hasText(name, "상품명은 필수입니다.");
             Assert.hasText(code, "상품코드는 필수입니다.");
