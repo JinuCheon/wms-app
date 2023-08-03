@@ -1,11 +1,27 @@
 package com.dope.wmsapp.product.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductSize {
-    private final Long widthInMillimeters;
-    private final Long heightInMillimeters;
-    private final Long lengthInMillimeters;
+
+    @Column(name = "width_in_millimeters", nullable = false)
+    @Comment("상품 너비(mm)")
+    private Long widthInMillimeters;
+
+    @Column(name = "height_in_millimeters", nullable = false)
+    @Comment("상품 높이(mm)")
+    private Long heightInMillimeters;
+
+    @Column(name = "length_in_millimeters", nullable = false)
+    @Comment("상품 길이(mm)")
+    private Long lengthInMillimeters;
 
     public ProductSize(final Long widthInMillimeters, final Long heightInMillimeters, final Long lengthInMillimeters) {
         this.widthInMillimeters = widthInMillimeters;
