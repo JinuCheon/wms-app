@@ -1,19 +1,26 @@
 package com.dope.wmsapp.product.feature;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
 class RegisterProductTest {
 
     private RegisterProduct registerProduct;
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
-        registerProduct = new RegisterProduct();
+        productRepository = new ProductRepository();
+        registerProduct = new RegisterProduct(productRepository);
     }
 
     @Test
@@ -49,17 +56,66 @@ class RegisterProductTest {
         registerProduct.request(request);
 
         //then
-//        assertThat(productRepository.findAll()).hasSize(1);
+        assertThat(productRepository.findAll()).hasSize(1);
     }
 
-    public class RegisterProduct {
-        public void request(final Request request) {
+    public static class RegisterProduct {
+        private final ProductRepository productRepository;
 
+        public RegisterProduct(final ProductRepository productRepository) {
+            this.productRepository = productRepository;
+        }
+
+        public void request(final Request request) {
+            Product product = request.toDomain();
+            productRepository.save(product);
         }
 
         public record Request(String name, String code, String description, String brand, String maker, String origin,
-                              Category electronics, TemperatureZone roomTemperature, Long weightInGrams,
+                              Category category, TemperatureZone temperatureZone, Long weightInGrams,
                               Long widthInMillimeters, Long heightInMillimeters, Long lengthInMillimeters) {
+            public Request {
+                Assert.hasText(name, "상품명은 필수입니다.");
+                Assert.hasText(code, "상품코드는 필수입니다.");
+                Assert.hasText(description, "상품설명은 필수입니다.");
+                Assert.hasText(brand, "브랜드는 필수입니다.");
+                Assert.hasText(maker, "제조사는 필수입니다.");
+                Assert.hasText(origin, "원산지는 필수입니다.");
+                Assert.notNull(category, "카테고리는 필수입니다.");
+                Assert.notNull(temperatureZone, "온도대는 필수입니다.");
+                Assert.notNull(weightInGrams, "무게는 필수입니다.");
+                if (0 > weightInGrams) {
+                    throw new IllegalArgumentException("무게는 0보다 커야합니다.");
+                }
+                Assert.notNull(widthInMillimeters, "너비는 필수입니다.");
+                if (0 > widthInMillimeters) {
+                    throw new IllegalArgumentException("너비는 0보다 커야합니다.");
+                }
+                Assert.notNull(heightInMillimeters, "높이는 필수입니다.");
+                if (0 > heightInMillimeters) {
+                    throw new IllegalArgumentException("세로길이는 0보다 커야합니다.");
+                }
+                Assert.notNull(lengthInMillimeters, "세로길이는 필수입니다.");
+                if (0 > lengthInMillimeters) {
+                    throw new IllegalArgumentException("가로길이는 0보다 커야합니다.");
+                }
+
+            }
+
+            public Product toDomain() {
+                return new Product(
+                        name,
+                        code,
+                        description,
+                        brand,
+                        maker,
+                        origin,
+                        category,
+                        temperatureZone,
+                        weightInGrams,
+                        new ProductSize(widthInMillimeters, heightInMillimeters, lengthInMillimeters)
+                );
+            }
 
         }
     }
@@ -72,6 +128,8 @@ class RegisterProductTest {
         Category(final String description) {
             this.description = description;
         }
+
+
     }
 
     public enum TemperatureZone {
@@ -80,6 +138,118 @@ class RegisterProductTest {
 
         TemperatureZone(final String description) {
             this.description = description;
+        }
+    }
+
+    public static class ProductSize {
+        private final Long widthInMillimeters;
+        private final Long heightInMillimeters;
+        private final Long lengthInMillimeters;
+
+        public ProductSize(final Long widthInMillimeters, final Long heightInMillimeters, final Long lengthInMillimeters) {
+            this.widthInMillimeters = widthInMillimeters;
+            this.heightInMillimeters = heightInMillimeters;
+            this.lengthInMillimeters = lengthInMillimeters;
+            validateProductSize(widthInMillimeters, heightInMillimeters, lengthInMillimeters);
+        }
+
+        private static void validateProductSize(final Long widthInMillimeters, final Long heightInMillimeters, final Long lengthInMillimeters) {
+            Assert.notNull(widthInMillimeters, "너비는 필수입니다.");
+            if (0 > widthInMillimeters) {
+                throw new IllegalArgumentException("너비는 0보다 커야합니다.");
+            }
+            Assert.notNull(heightInMillimeters, "높이는 필수입니다.");
+            if (0 > heightInMillimeters) {
+                throw new IllegalArgumentException("세로길이는 0보다 커야합니다.");
+            }
+            Assert.notNull(lengthInMillimeters, "세로길이는 필수입니다.");
+            if (0 > lengthInMillimeters) {
+                throw new IllegalArgumentException("가로길이는 0보다 커야합니다.");
+            }
+        }
+    }
+
+    public static class Product {
+        private Long id;
+        private final String name;
+        private final String code;
+        private final String description;
+        private final String brand;
+        private final String maker;
+        private final String origin;
+        private final Category category;
+        private final TemperatureZone temperatureZone;
+        private final Long weightInGrams;
+        private final ProductSize productSize;
+
+        public Product(final String name,
+                       final String code,
+                       final String description,
+                       final String brand,
+                       final String maker,
+                       final String origin,
+                       final Category category,
+                       final TemperatureZone temperatureZone,
+                       final Long weightInGrams,
+                       final ProductSize productSize) {
+            this.name = name;
+            this.code = code;
+            this.description = description;
+            this.brand = brand;
+            this.maker = maker;
+            this.origin = origin;
+            this.category = category;
+            this.temperatureZone = temperatureZone;
+            this.weightInGrams = weightInGrams;
+            this.productSize = productSize;
+            validateConstructor(name, code, description, brand, maker, origin, category, temperatureZone, weightInGrams, productSize);
+
+        }
+
+        private static void validateConstructor(final String name,
+                                                final String code,
+                                                final String description,
+                                                final String brand,
+                                                final String maker,
+                                                final String origin,
+                                                final Category category,
+                                                final TemperatureZone temperatureZone,
+                                                final Long weightInGrams,
+                                                final ProductSize productSize) {
+            Assert.hasText(name, "상품명은 필수입니다.");
+            Assert.hasText(code, "상품코드는 필수입니다.");
+            Assert.hasText(description, "상품설명은 필수입니다.");
+            Assert.hasText(brand, "브랜드는 필수입니다.");
+            Assert.hasText(maker, "제조사는 필수입니다.");
+            Assert.hasText(origin, "원산지는 필수입니다.");
+            Assert.notNull(category, "카테고리는 필수입니다.");
+            Assert.notNull(temperatureZone, "온도대는 필수입니다.");
+            Assert.notNull(weightInGrams, "무게는 필수입니다.");
+            if (0 > weightInGrams) {
+                throw new IllegalArgumentException("무게는 0보다 커야합니다.");
+            }
+            Assert.notNull(productSize, "상품크기는 필수입니다.");
+        }
+
+        public void assignId(final Long id) {
+            this.id = id;
+        }
+
+        public Long getId() {
+            return id;
+        }
+    }
+
+    private class ProductRepository {
+        private final Map<Long, Product> products = new HashMap<>();
+        private Long nextId = 1L;
+        public void save(Product product) {
+            product.assignId(nextId++);
+            products.put(product.getId(), product);
+        }
+
+        public List<Product> findAll() {
+            return new ArrayList<>(products.values());
         }
     }
 }
