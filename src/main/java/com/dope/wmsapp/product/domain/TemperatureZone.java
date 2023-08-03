@@ -1,4 +1,4 @@
-package com.dope.wmsapp.product.feature;
+package com.dope.wmsapp.product.domain;
 
 public enum TemperatureZone {
     ROOM_TEMPERATURE("상온");

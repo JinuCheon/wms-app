@@ -1,5 +1,8 @@
 package com.dope.wmsapp.product.feature;
 
+import com.dope.wmsapp.product.domain.Category;
+import com.dope.wmsapp.product.domain.ProductRepository;
+import com.dope.wmsapp.product.domain.TemperatureZone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.dope.wmsapp.product.feature;
+package com.dope.wmsapp.product.domain;
 
 import org.springframework.util.Assert;
 

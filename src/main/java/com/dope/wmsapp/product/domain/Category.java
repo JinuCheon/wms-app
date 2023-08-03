@@ -1,4 +1,4 @@
-package com.dope.wmsapp.product.feature;
+package com.dope.wmsapp.product.domain;
 
 public enum Category {
     ELECTRONICS("전자제품");

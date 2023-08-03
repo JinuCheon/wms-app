@@ -1,5 +1,10 @@
 package com.dope.wmsapp.product.feature;
 
+import com.dope.wmsapp.product.domain.Category;
+import com.dope.wmsapp.product.domain.Product;
+import com.dope.wmsapp.product.domain.ProductRepository;
+import com.dope.wmsapp.product.domain.ProductSize;
+import com.dope.wmsapp.product.domain.TemperatureZone;
 import org.springframework.util.Assert;
 
 public class RegisterProduct {
