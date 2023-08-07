@@ -1,11 +1,9 @@
 package com.dope.wmsapp.inbound.feature;
 
 import com.dope.wmsapp.inbound.domain.InboundRepository;
-import com.dope.wmsapp.product.domain.Category;
 import com.dope.wmsapp.product.domain.Product;
 import com.dope.wmsapp.product.domain.ProductRepository;
-import com.dope.wmsapp.product.domain.ProductSize;
-import com.dope.wmsapp.product.domain.TemperatureZone;
+import com.dope.wmsapp.product.fixture.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,23 +31,9 @@ class RegisterInboundTest {
     void registerInbound() {
         // mock 객체를 "Stubbing" 한다.
         // Stubbing: 객체의 행동을 조작하는 것
-        Mockito.when(productRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(new Product(
-                "name",
-                "code",
-                "description",
-                "brand",
-                "category",
-                "origin",
-                Category.ELECTRONICS,
-                TemperatureZone.ROOM_TEMPERATURE,
-                1000L,
-                 new ProductSize(
-                            1L,
-                            1L,
-                            1L
-                    )
-                 )
-        ));
+        final Product product = ProductFixture.aProduct().build();
+        Mockito.when(productRepository.findById(Mockito.anyLong())).
+                thenReturn(Optional.of(product));
         final LocalDateTime orderRequestedAt = LocalDateTime.now();
         final LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
         final Long productNo = 1L;
