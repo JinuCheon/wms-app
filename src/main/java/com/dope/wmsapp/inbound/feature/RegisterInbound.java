@@ -20,25 +20,33 @@ class RegisterInbound {
 
     public void request(final Request request) {
         // TODO 요청을 도메인으로 변경해서 도메인을 저장한다.
+        final Inbound inbound = createInbound(request);
+        inboundRepository.save(inbound);
+    }
 
-        // 음. 새로운 InboundItem 객체를 한 번 더 생성하는 이유가 있나..?
-        final List<InboundItem> inboundItems = request.inboundItem.stream()
-                .map(item -> new InboundItem(
-                        productRepository.findById(item.productNo).orElseThrow(),
-                        item.quantity,
-                        item.unitPrice,
-                        item.description
-                ))
-                .toList();
-        // '입고' 도메인 객체 생성. 즉, 입고는 개별 아이템(InboundItem)을 여러개 가지고 있다.
-        final Inbound inbound = new Inbound(
+    private Inbound createInbound(final Request request) {
+        return new Inbound(
                 request.title,
                 request.description,
                 request.orderRequestedAt,
                 request.estimatedArrivalAt,
-                inboundItems
+                mapToInboundItems(request)
         );
-        inboundRepository.save(inbound);
+    }
+
+    private List<InboundItem> mapToInboundItems(final Request request) {
+        return request.inboundItem.stream()
+                .map(item -> newInboundItem(item))
+                .toList();
+    }
+
+    private InboundItem newInboundItem(final Request.Item item) {
+        return new InboundItem(
+                productRepository.getBy(item.productNo),
+                item.quantity,
+                item.unitPrice,
+                item.description
+        );
     }
 
     public record Request(
