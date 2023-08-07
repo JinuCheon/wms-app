@@ -31,9 +31,7 @@ class RegisterInboundTest {
     void registerInbound() {
         // mock 객체를 "Stubbing" 한다.
         // Stubbing: 객체의 행동을 조작하는 것
-        final Product product = ProductFixture.aProduct().build();
-        Mockito.when(productRepository.findById(Mockito.anyLong())).
-                thenReturn(Optional.of(product));
+        Mockito.when(productRepository.getBy(Mockito.anyLong())).thenReturn(ProductFixture.aProduct().build());
         final LocalDateTime orderRequestedAt = LocalDateTime.now();
         final LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
         final Long productNo = 1L;
