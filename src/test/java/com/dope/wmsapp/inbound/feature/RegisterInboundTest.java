@@ -1,27 +1,34 @@
 package com.dope.wmsapp.inbound.feature;
 
+import com.dope.wmsapp.common.ApiTest;
 import com.dope.wmsapp.inbound.domain.InboundRepository;
 import com.dope.wmsapp.product.domain.Product;
 import com.dope.wmsapp.product.domain.ProductRepository;
 import com.dope.wmsapp.product.fixture.ProductFixture;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-class RegisterInboundTest {
+class RegisterInboundTest extends ApiTest {
 
     private RegisterInbound registerInbound;
-    private ProductRepository productRepository;
-    private InboundRepository inboundRepository;
+    @MockBean private ProductRepository productRepository;
+    @Autowired private InboundRepository inboundRepository;
 
     @BeforeEach
-    void setUp() {
-        productRepository = Mockito.mock(ProductRepository.class);
+    void setUpTest() {
         inboundRepository = new InboundRepository();
         registerInbound = new RegisterInbound(productRepository, inboundRepository);
     }
@@ -55,7 +62,17 @@ class RegisterInboundTest {
                 estimatedArrivalAt,
                 inboundItems
         );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when()
+                .post("/inbounds")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
         registerInbound.request(request);
+
+        Assertions.assertThat(inboundRepository.findAll()).hasSize(1);
     }
 
 }
