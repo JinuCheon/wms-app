@@ -3,6 +3,7 @@ package com.dope.wmsapp.inbound.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,6 +46,10 @@ public class Inbound {
     @Comment("입고 품목들")
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<InboundItem> inboundItems = new ArrayList<>();
+    @Enumerated
+    @Column(name = "status", nullable = false)
+    @Comment("입고 상태")
+    private InboundStatus status = InboundStatus.REQUESTED;
 
     public Inbound(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
         validateConstructor(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
@@ -67,4 +72,10 @@ public class Inbound {
         Assert.notEmpty(inboundItems, "입고 상품은 필수입니다.");
     }
 
+    public void confirmed() {
+        if (status != InboundStatus.REQUESTED) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
+        status = InboundStatus.CONFIRMED;
+    }
 }
