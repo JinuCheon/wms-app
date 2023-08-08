@@ -63,9 +63,10 @@ class ConfirmInboundTest {
         }
 
         public void request(final Long inboundNo) {
-            final Inbound inbound = inboundRepository.findById(inboundNo).orElseThrow();
+            final Inbound inbound = inboundRepository.getBy(inboundNo);
 
             inbound.confirmed();
         }
+
     }
 }
