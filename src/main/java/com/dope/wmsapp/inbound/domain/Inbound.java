@@ -3,6 +3,7 @@ package com.dope.wmsapp.inbound.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +29,7 @@ public class Inbound {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("입고 번호")
-    private Long id;
+    private Long inboundNo;
     @Column(name = "title", nullable = false)
     @Comment("입고명")
     private String title;
@@ -45,8 +46,16 @@ public class Inbound {
     @Comment("입고 품목들")
     @OneToMany(mappedBy = "inbound", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<InboundItem> inboundItems = new ArrayList<>();
+    @Enumerated
+    @Column(name = "status", nullable = false)
+    @Comment("입고 상태")
+    private InboundStatus status = InboundStatus.REQUESTED;
 
-    public Inbound(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
+    public Inbound(final String title,
+                   final String description,
+                   final LocalDateTime orderRequestedAt,
+                   final LocalDateTime estimatedArrivalAt,
+                   final List<InboundItem> inboundItems) {
         validateConstructor(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
         this.title = title;
         this.description = description;
@@ -59,6 +68,18 @@ public class Inbound {
         this.inboundItems = inboundItems;
     }
 
+    public Inbound(final Long inboundNo,
+                   final String title,
+                   final String description,
+                   final LocalDateTime orderRequestedAt,
+                   final LocalDateTime estimatedArrivalAt,
+                   final List<InboundItem> inboundItems,
+                   final InboundStatus inboundStatus) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
+        this.status = inboundStatus;
+    }
+
     private static void validateConstructor(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
         Assert.hasText(title, "입고 제목은 필수입니다.");
         Assert.hasText(description, "입고 설명은 필수입니다.");
@@ -67,4 +88,14 @@ public class Inbound {
         Assert.notEmpty(inboundItems, "입고 상품은 필수입니다.");
     }
 
+    public void confirmed() {
+        validateConfirmStatus();
+        status = InboundStatus.CONFIRMED;
+    }
+
+    private void validateConfirmStatus() {
+        if (status != InboundStatus.REQUESTED) {
+            throw new IllegalStateException("입고 요청 상태가 아닙니다.");
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.dope.wmsapp.inbound.domain;
 
 import com.dope.wmsapp.product.domain.Product;
+import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -48,6 +49,16 @@ public class InboundItem {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.description = description;
+    }
+
+    @VisibleForTesting
+    public InboundItem(final Long inboundItemNo,
+                       final Product product,
+                       final Long quantity,
+                       final Long unitPrice,
+                       final String description) {
+        this(product, quantity, unitPrice, description);
+        this.inboundItemNo = inboundItemNo;
     }
 
     private static void validateConstructor(final Product product, final Long quantity, final Long unitPrice, final String description) {
