@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,7 +32,6 @@ public class RegisterInbound {
     @ResponseStatus(HttpStatus.CREATED)
     public void request(@RequestBody @Valid final Request request) {
         // TODO 요청을 도메인으로 변경해서 도메인을 저장한다.
-        System.out.println("request.inboundItem.size() = " + request.inboundItem.size());
         final Inbound inbound = createInbound(request);
         inboundRepository.save(inbound);
     }

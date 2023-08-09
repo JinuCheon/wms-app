@@ -1,40 +1,33 @@
 package com.dope.wmsapp.inbound.feature;
 
-import com.dope.wmsapp.inbound.domain.Inbound;
-import com.dope.wmsapp.inbound.domain.InboundFixture;
+import com.dope.wmsapp.common.ApiTest;
+import com.dope.wmsapp.common.Scenario;
 import com.dope.wmsapp.inbound.domain.InboundRepository;
-import com.dope.wmsapp.inbound.domain.InboundStatus;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class ConfirmInboundTest extends ApiTest {
 
-class ConfirmInboundTest {
+    @Autowired private ConfirmInbound confirmInbound;
+    @Autowired private InboundRepository inboundRepository;
 
-    private ConfirmInbound confirmInbound;
-    private InboundRepository inboundRepository;
-
-    @BeforeEach
-    void setUp() {
-        inboundRepository = Mockito.mock(InboundRepository.class);
-        confirmInbound = new ConfirmInbound(inboundRepository);
-    }
     @Test
     @DisplayName("입고를 승인한다.")
     void confirmInbound() {
         //given
         final Long inboundNo = 1L;
-        final Inbound inbound = InboundFixture.anInbound().build();
-        Mockito.when(inboundRepository.getBy(inboundNo))
-                .thenReturn(inbound);
+        Scenario
+                .registerProduct().request()
+                .registerInbound().request();
         //when
-        confirmInbound.request(inboundNo);
-
-        //then
-        // TODO inbound상태가 승인으로 변경되었는지 확인
-        assertThat(inbound.getStatus()).isEqualTo(InboundStatus.CONFIRMED);
+        RestAssured.given()
+                .when()
+                .post("/inbounds/{inboundNo}/confirm", inboundNo)
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
     }
 
 }
