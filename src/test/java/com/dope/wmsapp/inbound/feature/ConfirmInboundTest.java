@@ -1,23 +1,19 @@
 package com.dope.wmsapp.inbound.feature;
 
 import com.dope.wmsapp.inbound.domain.Inbound;
-import com.dope.wmsapp.inbound.domain.InboundItem;
+import com.dope.wmsapp.inbound.domain.InboundFixture;
 import com.dope.wmsapp.inbound.domain.InboundRepository;
 import com.dope.wmsapp.inbound.domain.InboundStatus;
-import com.dope.wmsapp.product.fixture.ProductFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConfirmInboundTest {
-
 
     private ConfirmInbound confirmInbound;
     private InboundRepository inboundRepository;
@@ -32,21 +28,9 @@ class ConfirmInboundTest {
     void confirmInbound() {
         //given
         final Long inboundNo = 1L;
-        final Inbound inbound = new Inbound(
-                "상품명",
-                "상품코드",
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(1),
-                List.of(new InboundItem(
-                        ProductFixture.aProduct().build(),
-                        1L,
-                        1500L,
-                        "description"
-                ))
-
-        );
-        Mockito.when(inboundRepository.findById(inboundNo))
-                .thenReturn(Optional.of(inbound));
+        final Inbound inbound = InboundFixture.anInbound().build();
+        Mockito.when(inboundRepository.getBy(inboundNo))
+                .thenReturn(inbound);
         //when
         confirmInbound.request(inboundNo);
 

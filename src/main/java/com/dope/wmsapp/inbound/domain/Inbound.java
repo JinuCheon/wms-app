@@ -29,7 +29,7 @@ public class Inbound {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("입고 번호")
-    private Long id;
+    private Long inboundNo;
     @Column(name = "title", nullable = false)
     @Comment("입고명")
     private String title;
@@ -62,6 +62,16 @@ public class Inbound {
             inboundItem.assignedInbound(this);
         }
         this.inboundItems = inboundItems;
+    }
+
+    public Inbound(final Long inboundNo,
+                   final String title,
+                   final String description,
+                   final LocalDateTime orderRequestedAt,
+                   final LocalDateTime estimatedArrivalAt,
+                   final List<InboundItem> inboundItems) {
+        this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
+        this.inboundNo = inboundNo;
     }
 
     private static void validateConstructor(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
