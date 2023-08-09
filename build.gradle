@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // SQL Logger
     implementation 'p6spy:p6spy:3.9.1'
+    implementation 'com.google.guava:guava:32.1.1-jre'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
