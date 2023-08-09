@@ -13,6 +13,7 @@ public class InboundFixture {
     private LocalDateTime orderRequestedAt = LocalDateTime.now();
     private LocalDateTime estimatedArrivalAt = LocalDateTime.now().plusDays(1);
     private List<InboundItemFixture> inboundItems = List.of(InboundItemFixture.anInboundItem());
+    private InboundStatus inboundStatus = InboundStatus.REQUESTED;
 
     public static InboundFixture anInbound() {
         return new InboundFixture();
@@ -48,6 +49,11 @@ public class InboundFixture {
         return this;
     }
 
+    public InboundFixture inboundStatus(final InboundStatus inboundStatus) {
+        this.inboundStatus = inboundStatus;
+        return this;
+    }
+
     @VisibleForTesting
     public Inbound build() {
         return new Inbound(
@@ -57,6 +63,7 @@ public class InboundFixture {
                 orderRequestedAt,
                 estimatedArrivalAt,
                 buildInboundItems()
+                ,inboundStatus
         );
     }
 

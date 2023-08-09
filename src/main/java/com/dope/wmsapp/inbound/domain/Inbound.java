@@ -51,7 +51,11 @@ public class Inbound {
     @Comment("입고 상태")
     private InboundStatus status = InboundStatus.REQUESTED;
 
-    public Inbound(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
+    public Inbound(final String title,
+                   final String description,
+                   final LocalDateTime orderRequestedAt,
+                   final LocalDateTime estimatedArrivalAt,
+                   final List<InboundItem> inboundItems) {
         validateConstructor(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
         this.title = title;
         this.description = description;
@@ -69,9 +73,11 @@ public class Inbound {
                    final String description,
                    final LocalDateTime orderRequestedAt,
                    final LocalDateTime estimatedArrivalAt,
-                   final List<InboundItem> inboundItems) {
+                   final List<InboundItem> inboundItems,
+                   final InboundStatus inboundStatus) {
         this(title, description, orderRequestedAt, estimatedArrivalAt, inboundItems);
         this.inboundNo = inboundNo;
+        this.status = inboundStatus;
     }
 
     private static void validateConstructor(final String title, final String description, final LocalDateTime orderRequestedAt, final LocalDateTime estimatedArrivalAt, final List<InboundItem> inboundItems) {
