@@ -1,39 +1,37 @@
 package com.dope.wmsapp.inbound.feature;
 
+import com.dope.wmsapp.common.ApiTest;
+import com.dope.wmsapp.common.Scenario;
 import com.dope.wmsapp.inbound.domain.Inbound;
 import com.dope.wmsapp.inbound.domain.InboundFixture;
 import com.dope.wmsapp.inbound.domain.InboundRepository;
 import com.dope.wmsapp.inbound.domain.InboundStatus;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RejectInboundTest {
+class RejectInboundTest extends ApiTest {
 
-    RejectInbound rejectInbound;
-    private InboundRepository inboundRepository;
+    @Autowired RejectInbound rejectInbound;
+    @Autowired InboundRepository inboundRepository;
 
-    @BeforeEach
-    void setUp() {
-        inboundRepository = Mockito.mock(InboundRepository.class);
-        rejectInbound = new RejectInbound(inboundRepository);
-    }
     @Test
     @DisplayName("입고를 반려/거부한다.")
     void rejectInbound() {
-        final Long inboundNo = 1L;
-        final Inbound inbound = InboundFixture.anInbound().build();
-        Mockito.when(inboundRepository.getBy(inboundNo))
-                .thenReturn(inbound);
+        Scenario.
+                registerProduct().request()
+                .registerInbound().request()
+                .rejectInbound().request();
 
-        final String rejectionReason = "반려 사유";
-        final RejectInbound.Request request = new RejectInbound.Request(rejectionReason);
-        rejectInbound.request(inboundNo, request);
-
-        assertThat(inbound.getStatus()).isEqualTo(InboundStatus.REJECTED);
+        assertThat(inboundRepository.getBy(1L).getStatus()).isEqualTo(InboundStatus.REJECTED);
     }
 
 }
