@@ -3,7 +3,7 @@ package com.dope.wmsapp.inbound.domain;
 public enum InboundStatus {
     REQUESTED("요청됨"),
     CONFIRMED("승인됨"),
-    CANCELED("취소됨");
+    REJECTED("거절됨");
 
     private final String description;
 
