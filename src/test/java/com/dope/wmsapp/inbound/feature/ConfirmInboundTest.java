@@ -9,8 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ConfirmInboundTest {
@@ -39,18 +37,4 @@ class ConfirmInboundTest {
         assertThat(inbound.getStatus()).isEqualTo(InboundStatus.CONFIRMED);
     }
 
-    private class ConfirmInbound {
-        private final InboundRepository inboundRepository;
-
-        public ConfirmInbound(final InboundRepository inboundRepository) {
-            this.inboundRepository = inboundRepository;
-        }
-
-        public void request(final Long inboundNo) {
-            final Inbound inbound = inboundRepository.getBy(inboundNo);
-
-            inbound.confirmed();
-        }
-
-    }
 }
