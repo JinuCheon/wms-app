@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-class RegisterLPN {
+public class RegisterLPN {
     private final InboundRepository inboundRepository;
     private final LPNRepository lpnRepository;
 
