@@ -2,34 +2,43 @@ package com.dope.wmsapp.inbound.feature;
 
 import com.dope.wmsapp.inbound.domain.Inbound;
 import com.dope.wmsapp.inbound.domain.InboundRepository;
-import org.springframework.stereotype.Component;
+import com.dope.wmsapp.inbound.domain.LPNRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
-@Component
+@RestController
+@RequiredArgsConstructor
 class RegisterLPN {
-    private InboundRepository inboundRepository;
-
-    public RegisterLPN(final InboundRepository inboundRepository) {
-        this.inboundRepository = inboundRepository;
-    }
+    private final InboundRepository inboundRepository;
+    private final LPNRepository lpnRepository;
 
     @Transactional
-    public void request(final Request request) {
-        final Inbound inbound = inboundRepository.getInbound(request.inboundItemNo);
+    @PostMapping("/inbound/inbound-items/{inboundItemNo}/lpn")
+    public void request(@PathVariable final Long inboundItemNo,
+                        @RequestBody @Valid final Request request) {
+        lpnRepository.findByLPNBarcode(request.lpnBarcode).ifPresent(
+                lpn -> {
+                    throw new IllegalArgumentException("이미 존재하는 LPN 바코드입니다.");
+                }
+        );
+        final Inbound inbound = inboundRepository.getInbound(inboundItemNo);
 
-        inbound.registerLPN(request.inboundItemNo, request.lpnBarcode, request.expirationAt);
+        inbound.registerLPN(inboundItemNo, request.lpnBarcode, request.expirationAt);
     }
 
-    public record Request(Long inboundItemNo,
-                          String lpnBarcode,
-                          LocalDateTime expirationAt) {
-        public Request {
-            Assert.notNull(inboundItemNo, "LPN을 등록할 입고 상품 번호는 필수입니다.");
-            Assert.notNull(lpnBarcode, "LPN 바코드는 필수입니다.");
-            Assert.notNull(expirationAt, "유통기한은 필수입니다.");
-        }
+    public record Request(
+            @NotBlank(message = "LPN 바코드는 필수입니다.")
+            String lpnBarcode,
+            @NotNull(message = "유통기한은 필수입니다.")
+            LocalDateTime expirationAt) {
     }
 }
