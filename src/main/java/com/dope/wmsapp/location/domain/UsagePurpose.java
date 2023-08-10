@@ -1,6 +1,6 @@
-package com.dope.wmsapp.location.feature;
+package com.dope.wmsapp.location.domain;
 
-enum UsagePurpose {
+public enum UsagePurpose {
     MOVE("이동 목적");
     private final String description;
 

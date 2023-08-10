@@ -1,5 +1,8 @@
 package com.dope.wmsapp.location.feature;
 
+import com.dope.wmsapp.location.domain.LocationRepository;
+import com.dope.wmsapp.location.domain.StorageType;
+import com.dope.wmsapp.location.domain.UsagePurpose;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

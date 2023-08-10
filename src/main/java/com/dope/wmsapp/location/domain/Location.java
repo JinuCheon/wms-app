@@ -1,8 +1,8 @@
-package com.dope.wmsapp.location.feature;
+package com.dope.wmsapp.location.domain;
 
 import org.springframework.util.Assert;
 
-class Location {
+public class Location {
     private final String locationBarcode;
     private final StorageType storageType;
     private final UsagePurpose usagePurpose;

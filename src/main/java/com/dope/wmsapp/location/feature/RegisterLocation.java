@@ -1,5 +1,9 @@
 package com.dope.wmsapp.location.feature;
 
+import com.dope.wmsapp.location.domain.Location;
+import com.dope.wmsapp.location.domain.LocationRepository;
+import com.dope.wmsapp.location.domain.StorageType;
+import com.dope.wmsapp.location.domain.UsagePurpose;
 import org.springframework.util.Assert;
 
 class RegisterLocation {

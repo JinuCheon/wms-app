@@ -1,10 +1,10 @@
-package com.dope.wmsapp.location.feature;
+package com.dope.wmsapp.location.domain;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class LocationRepository {
+public class LocationRepository {
     private final Map<Long, Location> locations = new HashMap<>();
     private Long sequence = 1L;
 

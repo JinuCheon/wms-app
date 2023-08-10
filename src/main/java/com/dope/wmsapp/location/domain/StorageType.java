@@ -1,6 +1,6 @@
-package com.dope.wmsapp.location.feature;
+package com.dope.wmsapp.location.domain;
 
-enum StorageType {
+public enum StorageType {
     TOTE("토트 바구니");
     private final String description;
 
