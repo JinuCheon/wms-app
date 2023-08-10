@@ -1,7 +1,11 @@
 package com.dope.wmsapp.inbound.domain;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -55,5 +59,56 @@ class InboundTest {
         }).isInstanceOf(IllegalStateException.class)
                 .hasMessage("입고 요청 상태가 아닙니다.");
 
+    }
+
+    @Test
+    @DisplayName("LPN을 등록한다.")
+    void registerLPN() {
+        //given
+        final Inbound inbound = InboundFixture.anInbound().inboundStatus(InboundStatus.CONFIRMED).build();
+        final Long inboundItemNo = 1L;
+        final String lpnBarcode = "LPN-0001";
+        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1L);
+
+        //when
+        inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
+
+        //then
+        final List<InboundItem> inboundItems = inbound.getInboundItems();
+        assertThat(inboundItems).hasSize(1);
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("LPN을 등록한다. - [실패] 입고 승인 상태가 아닐 경우")
+    void fial_invalid_status_registerLPN() {
+        //given
+        final Inbound inbound = InboundFixture.anInbound().build();
+        final Long inboundItemNo = 1L;
+        final String lpnBarcode = "LPN-0001";
+        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1L);
+
+        //when
+        assertThatThrownBy(() -> {
+            inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessage("입고 승인 상태가 아닙니다.");
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("LPN을 등록한다. - [실패] 입고 승인 상태가 아닐 경우")
+    void fail_expire_registerLPN() {
+        //given
+        final Inbound inbound = InboundFixture.anInbound().inboundStatus(InboundStatus.CONFIRMED).build();
+        final Long inboundItemNo = 1L;
+        final String lpnBarcode = "LPN-0001";
+        final LocalDateTime expirationAt = LocalDateTime.now();
+
+        //when
+        assertThatThrownBy(() -> {
+            inbound.registerLPN(inboundItemNo, lpnBarcode, expirationAt);
+        }).isInstanceOf(IllegalStateException.class)
+                .hasMessage("유효기간이 지난 LPN입니다.");
     }
 }
