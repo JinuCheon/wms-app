@@ -7,16 +7,14 @@ import org.junit.jupiter.api.Test;
 class LocationTest {
 
     private final com.dope.wmsapp.inbound.domain.LPNFixture LPNFixture = new LPNFixture();
+    private final LocationFixture locationFixture = new LocationFixture();
 
     @Test
     void assignLPN() {
-        final Location location = createLocation();
-
+        final Location location = locationFixture.build();
         final LPN lpn = LPNFixture.build();
 
         location.assignLPN(lpn);
-
-
     }
 
     private LPN createLpn() {
@@ -24,10 +22,6 @@ class LocationTest {
     }
 
     private Location createLocation() {
-        final String locationBarcode = "A-1-1";
-        final StorageType storageType = StorageType.TOTE;
-        final UsagePurpose usagePurpose = UsagePurpose.MOVE;
-        final Location location = new Location(locationBarcode, storageType, usagePurpose);
-        return location;
+        return locationFixture.build();
     }
 }
