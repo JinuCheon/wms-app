@@ -4,16 +4,22 @@ import com.dope.wmsapp.location.domain.Location;
 import com.dope.wmsapp.location.domain.LocationRepository;
 import com.dope.wmsapp.location.domain.StorageType;
 import com.dope.wmsapp.location.domain.UsagePurpose;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequiredArgsConstructor
 class RegisterLocation {
     private final LocationRepository locationRepository;
 
-    public RegisterLocation(final LocationRepository locationRepository) {
-        this.locationRepository = locationRepository;
-    }
-
-    public void request(final Request request) {
+    @PostMapping("/locations")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void request(@RequestBody final Request request) {
         final Location location = request.toDomain();
         locationRepository.save(location);
     }
@@ -34,5 +40,6 @@ class RegisterLocation {
                     usagePurpose
             );
         }
+
     }
 }

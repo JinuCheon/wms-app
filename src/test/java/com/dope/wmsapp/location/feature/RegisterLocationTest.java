@@ -1,24 +1,21 @@
 package com.dope.wmsapp.location.feature;
 
+import com.dope.wmsapp.common.ApiTest;
 import com.dope.wmsapp.location.domain.LocationRepository;
 import com.dope.wmsapp.location.domain.StorageType;
 import com.dope.wmsapp.location.domain.UsagePurpose;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RegisterLocationTest {
+class RegisterLocationTest extends ApiTest {
 
-    private RegisterLocation registerLocation;
-    private LocationRepository locationRepository;
-
-    @BeforeEach
-    void setUp() {
-        locationRepository = new LocationRepository();
-        registerLocation = new RegisterLocation(locationRepository);
-    }
+    @Autowired
+    LocationRepository locationRepository;
 
     @Test
     @DisplayName("로케이션을 등록한다.")
@@ -31,7 +28,14 @@ class RegisterLocationTest {
                 storageType,
                 usagePurpose
         );
-        registerLocation.request(request);
+
+        RestAssured.given().log().all()
+                .body(request)
+                .contentType("application/json")
+                .when()
+                .post("http://localhost:8080/locations")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         assertThat(locationRepository.findAll()).hasSize(1);
     }
