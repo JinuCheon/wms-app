@@ -4,13 +4,17 @@ import com.dope.wmsapp.inbound.feature.api.ConfirmInboundApi;
 import com.dope.wmsapp.inbound.feature.api.RegisterInboundApi;
 import com.dope.wmsapp.inbound.feature.api.RegisterLPNApi;
 import com.dope.wmsapp.inbound.feature.api.RejectInboundApi;
+import com.dope.wmsapp.location.feature.api.RegisterLocationApi;
 import com.dope.wmsapp.product.feature.api.RegisterProductApi;
-import io.restassured.RestAssured;
 
 public class Scenario {
 
     public static RegisterProductApi registerProduct() {
         return new RegisterProductApi();
+    }
+
+    public static RegisterLocationApi registerLocation() {
+        return new RegisterLocationApi();
     }
 
     public RegisterInboundApi registerInbound() {
