@@ -1,18 +1,18 @@
 package com.dope.wmsapp.location.domain;
 
-import com.dope.wmsapp.inbound.domain.InboundItemFixture;
 import com.dope.wmsapp.inbound.domain.LPN;
+import com.dope.wmsapp.inbound.domain.LPNFixture;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 class LocationTest {
+
+    private final com.dope.wmsapp.inbound.domain.LPNFixture LPNFixture = new LPNFixture();
 
     @Test
     void assignLPN() {
         final Location location = createLocation();
 
-        final LPN lpn = createLpn();
+        final LPN lpn = LPNFixture.build();
 
         location.assignLPN(lpn);
 
@@ -20,10 +20,7 @@ class LocationTest {
     }
 
     private LPN createLpn() {
-        final String lpnBarcode = "LPN-1";
-        final LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
-        final LPN lpn = new LPN(lpnBarcode, expirationAt, InboundItemFixture.anInboundItem().build());
-        return lpn;
+        return LPNFixture.build();
     }
 
     private Location createLocation() {
