@@ -68,6 +68,12 @@ public class Location {
 
     public void assignLPN(final LPN lpn) {
         Assert.notNull(lpn, "LPN은 필수입니다.");
-        locationLPNList
+        locationLPNList.stream()
+                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+                .findFirst()
+                .ifPresentOrElse(
+                        LocationLPN::increaseQuantity,
+                        () -> locationLPNList.add(new LocationLPN(this, lpn))
+                );
     }
 }

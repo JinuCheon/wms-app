@@ -6,6 +6,10 @@ public class LocationFixture {
     private StorageType storageType = StorageType.TOTE;
     private UsagePurpose usagePurpose = UsagePurpose.MOVE;
 
+    public static LocationFixture aLocation() {
+        return new LocationFixture();
+    }
+
     public LocationFixture locationBarcode(final String locationBarcode) {
         this.locationBarcode = locationBarcode;
         return this;

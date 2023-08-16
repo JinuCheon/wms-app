@@ -8,6 +8,10 @@ public class LPNFixture {
     private LocalDateTime expirationAt = LocalDateTime.now().plusDays(1);
     private InboundItemFixture inboundItemFixture = InboundItemFixture.anInboundItem();
 
+    public static LPNFixture anLPN() {
+        return new LPNFixture();
+    }
+
     public LPNFixture withLPNBarcode(final String lpnBarcode) {
         this.lpnBarcode = lpnBarcode;
         return this;

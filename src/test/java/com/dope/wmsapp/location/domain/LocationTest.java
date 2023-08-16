@@ -4,24 +4,19 @@ import com.dope.wmsapp.inbound.domain.LPN;
 import com.dope.wmsapp.inbound.domain.LPNFixture;
 import org.junit.jupiter.api.Test;
 
-class LocationTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private final com.dope.wmsapp.inbound.domain.LPNFixture LPNFixture = new LPNFixture();
-    private final LocationFixture locationFixture = new LocationFixture();
+class LocationTest {
 
     @Test
     void assignLPN() {
-        final Location location = locationFixture.build();
-        final LPN lpn = LPNFixture.build();
+        final Location location = LocationFixture.aLocation().build();
+        final LPN lpn = LPNFixture.anLPN().build();
 
         location.assignLPN(lpn);
+
+        assertThat(location.getLocationLPNList()).hasSize(1);
+        assertThat(location.getLocationLPNList().get(0).getInventoryQuantity()).isEqualTo(1L);
     }
 
-    private LPN createLpn() {
-        return LPNFixture.build();
-    }
-
-    private Location createLocation() {
-        return locationFixture.build();
-    }
 }

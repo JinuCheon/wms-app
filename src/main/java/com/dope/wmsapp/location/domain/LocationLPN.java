@@ -1,19 +1,21 @@
 package com.dope.wmsapp.location.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.dope.wmsapp.inbound.domain.LPN;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-@Entity
-@Table(name = "location_lpn")
 public class LocationLPN {
-    @ManyToOne
-    @JoinColumn(name = "location_location_no")
     private Location location;
+    private LPN lpn;
+    private Long inventoryQuantity;
 
+    public LocationLPN(final Location location, final LPN lpn) {
+        this.location = location;
+        this.lpn = lpn;
+        this.inventoryQuantity = 1L;
+    }
+
+    public void increaseQuantity() {
+        this.inventoryQuantity++;
+    }
 }
