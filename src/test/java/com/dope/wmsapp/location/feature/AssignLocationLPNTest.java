@@ -1,5 +1,7 @@
 package com.dope.wmsapp.location.feature;
 
+import com.dope.wmsapp.inbound.domain.LPN;
+import com.dope.wmsapp.inbound.domain.LPNRepository;
 import com.dope.wmsapp.location.domain.Location;
 import com.dope.wmsapp.location.domain.LocationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -26,9 +28,11 @@ class AssignLocationLPNTest {
 
     private class AssignLocationLPN {
         private LocationRepository locationRepository;
+        private LPNRepository lpnRepository;
 
         public void request(final Request request) {
             final Location location = locationRepository.getLocationByBarcode(request.locationBarcode);
+            final LPN lpn = lpnRepository.getLPNByLPNBarcode(request.locationBarcode);
         }
 
         public record Request(String locationBarcode, String lpnBarcode) {
