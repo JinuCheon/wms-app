@@ -1,5 +1,6 @@
 package com.dope.wmsapp.location.domain;
 
+import com.dope.wmsapp.inbound.domain.LPN;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,5 +53,9 @@ public class Location {
 
     public Long getLocationNo() {
         return locationNo;
+    }
+
+    public void assignLPN(final LPN lpn) {
+
     }
 }
