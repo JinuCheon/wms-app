@@ -2,6 +2,7 @@ package com.dope.wmsapp.location.feature;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.util.Assert;
 
 class AssignLocationLPNTest {
 
@@ -20,10 +21,13 @@ class AssignLocationLPNTest {
 
     private class AssignLocationLPN {
         public void request(final Request request) {
-
         }
 
         public record Request(String locationBarcode, String lpnBarcode) {
+            public Request {
+                Assert.hasText(locationBarcode, "locationBarcode must not be empty");
+                Assert.hasText(lpnBarcode, "lpnBarcode must not be empty");
+            }
         }
     }
 }
