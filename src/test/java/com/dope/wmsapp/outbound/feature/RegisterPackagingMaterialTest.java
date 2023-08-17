@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class RegisterPackagingMaterialTest {
 
     @Test
-    void name() {
+    void registerPackagingMaterial() {
 
     }
 }
