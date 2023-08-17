@@ -1,9 +1,12 @@
 package com.dope.wmsapp.outbound.domain;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class PackageMaterialRepository {
     Long sequence = 1L;
     private Map<Long, PackagingMaterial> packagingMaterials = new HashMap<>();

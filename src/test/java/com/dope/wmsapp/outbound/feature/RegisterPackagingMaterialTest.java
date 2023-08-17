@@ -1,25 +1,24 @@
 package com.dope.wmsapp.outbound.feature;
 
+import com.dope.wmsapp.common.ApiTest;
 import com.dope.wmsapp.outbound.domain.MaterialType;
 import com.dope.wmsapp.outbound.domain.PackageMaterialRepository;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RegisterPackagingMaterialTest {
+class RegisterPackagingMaterialTest extends ApiTest {
 
-    RegisterPackageMaterial registerPackageMaterial;
+    @Autowired
     PackageMaterialRepository packageMaterialRepository;
-
-    @BeforeEach
-    void setUp() {
-        packageMaterialRepository = new PackageMaterialRepository();
-        registerPackageMaterial = new RegisterPackageMaterial(packageMaterialRepository);
-    }
 
     @Test
     void registerPackagingMaterial() {
+        final String name = "name";
+        final String code = "code";
         final Long innerWidthInMillimeters = 1000L;
         final Long innerHeightInMillimeters = 1000L;
         final Long innerLengthInMillimeters = 1000L;
@@ -30,8 +29,8 @@ class RegisterPackagingMaterialTest {
         final Long maxWeightInGrams = 1000L;
         final MaterialType materialType = MaterialType.CORRUGATED_BOX;
         final RegisterPackageMaterial.Request request = new RegisterPackageMaterial.Request(
-                "name",
-                "code",
+                name,
+                code,
                 innerWidthInMillimeters,
                 innerHeightInMillimeters,
                 innerLengthInMillimeters,
@@ -42,7 +41,12 @@ class RegisterPackagingMaterialTest {
                 maxWeightInGrams,
                 materialType
         );
-        registerPackageMaterial.request(request);
+        RestAssured.given().log().all()
+                .body(request)
+                .contentType("application/json")
+                .when().post("/package-materials")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
 
         assertThat(packageMaterialRepository.finAll()).hasSize(1);
     }

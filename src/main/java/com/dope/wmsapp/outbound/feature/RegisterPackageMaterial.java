@@ -4,16 +4,23 @@ import com.dope.wmsapp.outbound.domain.MaterialType;
 import com.dope.wmsapp.outbound.domain.PackageMaterialRepository;
 import com.dope.wmsapp.outbound.domain.PackagingMaterial;
 import com.dope.wmsapp.outbound.domain.PackagingMaterialDimension;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
+@RestController
 class RegisterPackageMaterial {
-    private PackageMaterialRepository packagingMaterialRepository;
 
-    public RegisterPackageMaterial(final PackageMaterialRepository packagingMaterialRepository) {
-        this.packagingMaterialRepository = packagingMaterialRepository;
-    }
+    private final PackageMaterialRepository packagingMaterialRepository;
 
-    public void request(final Request request) {
+    @PostMapping("/package-materials")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void request(@RequestBody final Request request) {
         final PackagingMaterial packagingMaterial = request.toDomain();
         packagingMaterialRepository.save(packagingMaterial);
     }
