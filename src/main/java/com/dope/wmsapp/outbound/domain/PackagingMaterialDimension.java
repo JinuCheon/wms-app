@@ -1,4 +1,4 @@
-package com.dope.wmsapp.outbound.feature;
+package com.dope.wmsapp.outbound.domain;
 
 import org.springframework.util.Assert;
 

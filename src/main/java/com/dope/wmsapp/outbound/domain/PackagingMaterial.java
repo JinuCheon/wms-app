@@ -1,8 +1,8 @@
-package com.dope.wmsapp.outbound.feature;
+package com.dope.wmsapp.outbound.domain;
 
 import org.springframework.util.Assert;
 
-class PackagingMaterial {
+public class PackagingMaterial {
     private final String name;
     private final String code;
     private final PackagingMaterialDimension packagingMaterialDimension;

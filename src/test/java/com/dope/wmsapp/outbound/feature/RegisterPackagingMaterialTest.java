@@ -1,5 +1,7 @@
 package com.dope.wmsapp.outbound.feature;
 
+import com.dope.wmsapp.outbound.domain.MaterialType;
+import com.dope.wmsapp.outbound.domain.PackageMaterialRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

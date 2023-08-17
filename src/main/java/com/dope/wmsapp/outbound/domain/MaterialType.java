@@ -1,6 +1,6 @@
-package com.dope.wmsapp.outbound.feature;
+package com.dope.wmsapp.outbound.domain;
 
-enum MaterialType {
+public enum MaterialType {
     CORRUGATED_BOX("골판지 상자");
     private final String description;
 

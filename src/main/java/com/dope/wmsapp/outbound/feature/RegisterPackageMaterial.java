@@ -1,5 +1,9 @@
 package com.dope.wmsapp.outbound.feature;
 
+import com.dope.wmsapp.outbound.domain.MaterialType;
+import com.dope.wmsapp.outbound.domain.PackageMaterialRepository;
+import com.dope.wmsapp.outbound.domain.PackagingMaterial;
+import com.dope.wmsapp.outbound.domain.PackagingMaterialDimension;
 import org.springframework.util.Assert;
 
 class RegisterPackageMaterial {
