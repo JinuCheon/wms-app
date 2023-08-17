@@ -39,11 +39,11 @@ public class Location {
     @Enumerated(EnumType.STRING)
     @Column(name = "usage_purpose", nullable = false)
     private UsagePurpose usagePurpose;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "location")
-    private List<LocationLPN> locationLPNList = new ArrayList<>();
+    @OneToMany(mappedBy = "location", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Inventory> inventories = new ArrayList<>();
 
-    public void setLocationLPNList(List<LocationLPN> locationLPNList) {
-        this.locationLPNList = locationLPNList;
+    public void setInventories(List<Inventory> inventories) {
+        this.inventories = inventories;
     }
 
     public Location(final String locationBarcode, final StorageType storageType, final UsagePurpose usagePurpose) {
@@ -65,12 +65,12 @@ public class Location {
 
     public void assignLPN(final LPN lpn) {
         Assert.notNull(lpn, "LPN은 필수입니다.");
-        locationLPNList.stream()
-                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+        inventories.stream()
+                .filter(inventory -> inventory.getLpn().equals(lpn))
                 .findFirst()
                 .ifPresentOrElse(
-                        LocationLPN::increaseQuantity,
-                        () -> locationLPNList.add(new LocationLPN(this, lpn))
+                        Inventory::increaseQuantity,
+                        () -> inventories.add(new Inventory(this, lpn))
                 );
     }
 }

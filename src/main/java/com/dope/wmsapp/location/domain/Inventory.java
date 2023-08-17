@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "location_lpn")
+@Table(name = "inventory")
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class LocationLPN {
+public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_lpn_no")
-    private Long locationLPNNo;
+    @Column(name = "inventory_no")
+    private Long inventoryNo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_no")
     private Location location;
@@ -31,7 +31,7 @@ public class LocationLPN {
     @Column(name = "inventory_quantity")
     private Long inventoryQuantity;
 
-    public LocationLPN(final Location location, final LPN lpn) {
+    public Inventory(final Location location, final LPN lpn) {
         this.location = location;
         this.lpn = lpn;
         this.inventoryQuantity = 1L;
