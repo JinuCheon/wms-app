@@ -4,8 +4,9 @@ import com.dope.wmsapp.inbound.feature.api.ConfirmInboundApi;
 import com.dope.wmsapp.inbound.feature.api.RegisterInboundApi;
 import com.dope.wmsapp.inbound.feature.api.RegisterLPNApi;
 import com.dope.wmsapp.inbound.feature.api.RejectInboundApi;
-import com.dope.wmsapp.location.feature.api.AssignLocationLPNApi;
+import com.dope.wmsapp.location.feature.api.AssignInventoryApi;
 import com.dope.wmsapp.location.feature.api.RegisterLocationApi;
+import com.dope.wmsapp.outbound.feature.api.RegisterPackageMaterialApi;
 import com.dope.wmsapp.product.feature.api.RegisterProductApi;
 
 public class Scenario {
@@ -18,8 +19,12 @@ public class Scenario {
         return new RegisterLocationApi();
     }
 
-    public static AssignLocationLPNApi assignLocationLPN() {
-        return new AssignLocationLPNApi();
+    public static AssignInventoryApi assignInventory() {
+        return new AssignInventoryApi();
+    }
+
+    public static RegisterPackageMaterialApi registerPackageMaterial() {
+        return new RegisterPackageMaterialApi();
     }
 
     public RegisterInboundApi registerInbound() {
