@@ -72,8 +72,11 @@ class RegisterPackagingMaterialTest {
     }
 
     private class RegisterPackageMaterial {
+        private PackageMaterialRepository packagingMaterialRepository;
+
         public void request(final Request request) {
             final PackagingMaterial packagingMaterial = request.toDomain();
+            packagingMaterialRepository.save(packagingMaterial);
         }
 
         record Request(String name,
