@@ -4,14 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class RegisterPackagingMaterialTest {
 
     RegisterPackageMaterial registerPackageMaterial;
-    private PackageMaterialRepository packageMaterialRepository;
+    PackageMaterialRepository packageMaterialRepository;
 
     @BeforeEach
     void setUp() {
-        registerPackageMaterial = new RegisterPackageMaterial();
+        packageMaterialRepository = new PackageMaterialRepository();
+        registerPackageMaterial = new RegisterPackageMaterial(packageMaterialRepository);
     }
 
     @Test
@@ -40,7 +47,7 @@ class RegisterPackagingMaterialTest {
         );
         registerPackageMaterial.request(request);
 
-//        assertThat(packageMaterialRepository.finAll()).hasSize(1);
+        assertThat(packageMaterialRepository.finAll()).hasSize(1);
     }
 
     private static class PackagingMaterial {
@@ -73,6 +80,10 @@ class RegisterPackagingMaterialTest {
 
     private class RegisterPackageMaterial {
         private PackageMaterialRepository packagingMaterialRepository;
+
+        public RegisterPackageMaterial(final PackageMaterialRepository packagingMaterialRepository) {
+            this.packagingMaterialRepository = packagingMaterialRepository;
+        }
 
         public void request(final Request request) {
             final PackagingMaterial packagingMaterial = request.toDomain();
@@ -204,5 +215,15 @@ class RegisterPackagingMaterialTest {
     }
 
     private class PackageMaterialRepository {
+        Long sequence = 1L;
+        private Map<Long, PackagingMaterial> packagingMaterials = new HashMap<>();
+
+        public void save(final PackagingMaterial packagingMaterial) {
+            packagingMaterials.put(sequence++, packagingMaterial);
+        }
+
+        public List<PackagingMaterial> finAll() {
+            return List.copyOf(packagingMaterials.values());
+        }
     }
 }
