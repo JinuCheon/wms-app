@@ -1,18 +1,25 @@
 package com.dope.wmsapp.location.domain;
 
+import com.dope.wmsapp.inbound.domain.LPN;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +39,12 @@ public class Location {
     @Enumerated(EnumType.STRING)
     @Column(name = "usage_purpose", nullable = false)
     private UsagePurpose usagePurpose;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "location")
+    private List<LocationLPN> locationLPNList = new ArrayList<>();
+
+    public void setLocationLPNList(List<LocationLPN> locationLPNList) {
+        this.locationLPNList = locationLPNList;
+    }
 
     public Location(final String locationBarcode, final StorageType storageType, final UsagePurpose usagePurpose) {
         validateConstructor(locationBarcode, storageType, usagePurpose);
@@ -50,7 +63,14 @@ public class Location {
         this.locationNo = locationNo;
     }
 
-    public Long getLocationNo() {
-        return locationNo;
+    public void assignLPN(final LPN lpn) {
+        Assert.notNull(lpn, "LPN은 필수입니다.");
+        locationLPNList.stream()
+                .filter(locationLPN -> locationLPN.getLpn().equals(lpn))
+                .findFirst()
+                .ifPresentOrElse(
+                        LocationLPN::increaseQuantity,
+                        () -> locationLPNList.add(new LocationLPN(this, lpn))
+                );
     }
 }
