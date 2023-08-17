@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-class RegisterPackageMaterial {
+public class RegisterPackageMaterial {
 
     private final PackageMaterialRepository packagingMaterialRepository;
 
@@ -26,7 +26,7 @@ class RegisterPackageMaterial {
         packagingMaterialRepository.save(packagingMaterial);
     }
 
-    record Request(
+    public record Request(
             @NotNull(message = "name must not be empty")
             String name,
             @NotNull(message = "code must not be empty")
