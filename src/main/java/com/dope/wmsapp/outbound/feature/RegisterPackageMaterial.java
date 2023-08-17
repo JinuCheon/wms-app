@@ -4,9 +4,10 @@ import com.dope.wmsapp.outbound.domain.MaterialType;
 import com.dope.wmsapp.outbound.domain.PackageMaterialRepository;
 import com.dope.wmsapp.outbound.domain.PackagingMaterial;
 import com.dope.wmsapp.outbound.domain.PackagingMaterialDimension;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,54 +26,37 @@ class RegisterPackageMaterial {
         packagingMaterialRepository.save(packagingMaterial);
     }
 
-    record Request(String name,
-                   String code,
-                   Long innerWidthInMillimeters,
-                   Long innerHeightInMillimeters,
-                   Long innerLengthInMillimeters,
-                   Long outerWidthInMillimeters,
-                   Long outerHeightInMillimeters,
-                   Long outerLengthInMillimeters,
-                   Long weightInGrams,
-                   Long maxWeightInGrams,
-                   MaterialType materialType) {
-        Request {
-            Assert.hasText(name, "name must not be empty");
-            Assert.hasText(code, "code must not be empty");
-            Assert.notNull(innerWidthInMillimeters, "innerWidthInMillimeters must not be null");
-            if (innerWidthInMillimeters < 1) {
-                throw new IllegalArgumentException("innerWidthInMillimeters must be greater than 1");
-            }
-            Assert.notNull(innerHeightInMillimeters, "innerHeightInMillimeters must not be null");
-            if (innerHeightInMillimeters < 1) {
-                throw new IllegalArgumentException("innerHeightInMillimeters must be greater than 1");
-            }
-            Assert.notNull(innerLengthInMillimeters, "innerLengthInMillimeters must not be null");
-            if (innerLengthInMillimeters < 1) {
-                throw new IllegalArgumentException("innerLengthInMillimeters must be greater than 1");
-            }
-            Assert.notNull(outerWidthInMillimeters, "outerWidthInMillimeters must not be null");
-            if (outerWidthInMillimeters < 1) {
-                throw new IllegalArgumentException("outerWidthInMillimeters must be greater than 1");
-            }
-            Assert.notNull(outerHeightInMillimeters, "outerHeightInMillimeters must not be null");
-            if (outerHeightInMillimeters < 1) {
-                throw new IllegalArgumentException("outerHeightInMillimeters must be greater than 1");
-            }
-            Assert.notNull(outerLengthInMillimeters, "outerLengthInMillimeters must not be null");
-            if (outerLengthInMillimeters < 1) {
-                throw new IllegalArgumentException("outerLengthInMillimeters must be greater than 1");
-            }
-            Assert.notNull(weightInGrams, "weightInGrams must not be null");
-            if (weightInGrams < 1) {
-                throw new IllegalArgumentException("weightInGrams must be greater than 1");
-            }
-            Assert.notNull(maxWeightInGrams, "maxWeightInGrams must not be null");
-            if (maxWeightInGrams < 1) {
-                throw new IllegalArgumentException("maxWeightInGrams must be greater than 1");
-            }
-            Assert.notNull(materialType, "corrugatedBox must not be null");
-        }
+    record Request(
+            @NotNull(message = "name must not be empty")
+            String name,
+            @NotNull(message = "code must not be empty")
+            String code,
+            @NotNull(message = "innerWidthInMillimeters must not be null")
+            @Min(value = 1, message = "innerWidthInMillimeters must be greater than 1")
+            Long innerWidthInMillimeters,
+            @NotNull(message = "innerHeightInMillimeters must not be null")
+            @Min(value = 1, message = "innerHeightInMillimeters must be greater than 1")
+            Long innerHeightInMillimeters,
+            @NotNull(message = "innerLengthInMillimeters must not be null")
+            @Min(value = 1, message = "innerLengthInMillimeters must be greater than 1")
+            Long innerLengthInMillimeters,
+            @NotNull(message = "outerWidthInMillimeters must not be null")
+            @Min(value = 1, message = "outerWidthInMillimeters must be greater than 1")
+            Long outerWidthInMillimeters,
+            @NotNull(message = "outerHeightInMillimeters must not be null")
+            @Min(value = 1, message = "outerHeightInMillimeters must be greater than 1")
+            Long outerHeightInMillimeters,
+            @NotNull(message = "outerLengthInMillimeters must not be null")
+            @Min(value = 1, message = "outerLengthInMillimeters must be greater than 1")
+            Long outerLengthInMillimeters,
+            @NotNull(message = "weightInGrams must not be null")
+            @Min(value = 1, message = "weightInGrams must be greater than 1")
+            Long weightInGrams,
+            @NotNull(message = "maxWeightInGrams must not be null")
+            @Min(value = 1, message = "maxWeightInGrams must be greater than 1")
+            Long maxWeightInGrams,
+            @NotNull(message = "materialType must not be null")
+            MaterialType materialType) {
 
         public PackagingMaterial toDomain() {
             return new PackagingMaterial(
