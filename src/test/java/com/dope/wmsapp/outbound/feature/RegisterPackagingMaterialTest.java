@@ -48,7 +48,7 @@ class RegisterPackagingMaterialTest extends ApiTest {
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
 
-        assertThat(packageMaterialRepository.finAll()).hasSize(1);
+        assertThat(packageMaterialRepository.findAll()).hasSize(1);
     }
 
 }

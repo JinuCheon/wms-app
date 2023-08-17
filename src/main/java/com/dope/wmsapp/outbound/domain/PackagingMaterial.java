@@ -1,14 +1,40 @@
 package com.dope.wmsapp.outbound.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+@Entity
+@Table(name = "packaging_material")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PackagingMaterial {
-    private final String name;
-    private final String code;
-    private final PackagingMaterialDimension packagingMaterialDimension;
-    private final Long weightInGrams;
-    private final Long maxWeightInGrams;
-    private final MaterialType materialType;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "packaging_material_no")
+    private Long packagingMaterialNo;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String code;
+    @Column(nullable = false)
+    @Embedded
+    private PackagingMaterialDimension packagingMaterialDimension;
+    @Column(nullable = false)
+    private Long weightInGrams;
+    @Column(nullable = false)
+    private Long maxWeightInGrams;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MaterialType materialType;
 
     public PackagingMaterial(final String name, final String code, final PackagingMaterialDimension packagingMaterialDimension, final Long weightInGrams, final Long maxWeightInGrams, final MaterialType materialType) {
         validateConstructor(name, code, packagingMaterialDimension, weightInGrams, maxWeightInGrams, materialType);

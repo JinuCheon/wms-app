@@ -1,14 +1,19 @@
 package com.dope.wmsapp.outbound.domain;
 
+import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+@Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PackagingMaterialDimension {
-    private final Long innerWidthInMillimeters;
-    private final Long innerHeightInMillimeters;
-    private final Long innerLengthInMillimeters;
-    private final Long outerWidthInMillimeters;
-    private final Long outerHeightInMillimeters;
-    private final Long outerLengthInMillimeters;
+    private Long innerWidthInMillimeters;
+    private Long innerHeightInMillimeters;
+    private Long innerLengthInMillimeters;
+    private Long outerWidthInMillimeters;
+    private Long outerHeightInMillimeters;
+    private Long outerLengthInMillimeters;
 
     public PackagingMaterialDimension(final Long innerWidthInMillimeters, final Long innerHeightInMillimeters, final Long innerLengthInMillimeters, final Long outerWidthInMillimeters, final Long outerHeightInMillimeters, final Long outerLengthInMillimeters) {
         validateConstructor(innerWidthInMillimeters, innerHeightInMillimeters, innerLengthInMillimeters, outerWidthInMillimeters, outerHeightInMillimeters, outerLengthInMillimeters);
