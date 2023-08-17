@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 class RegisterPackagingMaterialTest {
 
     RegisterPackageMaterial registerPackageMaterial;
+    private PackageMaterialRepository packageMaterialRepository;
 
     @BeforeEach
     void setUp() {
@@ -37,11 +38,16 @@ class RegisterPackagingMaterialTest {
                 MaterialType.CORRUGATED_BOX
         );
         registerPackageMaterial.request(request);
+
+//        assertThat(packageMaterialRepository.finAll()).hasSize(1);
+    }
+
+    private static class PackagingMaterial {
     }
 
     private class RegisterPackageMaterial {
         public void request(final Request request) {
-
+            final PackagingMaterial packagingMaterial = request.toDomain();
         }
 
         record Request(String name,
@@ -92,6 +98,10 @@ class RegisterPackagingMaterialTest {
                 }
                 Assert.notNull(corrugatedBox, "corrugatedBox must not be null");
             }
+
+            public PackagingMaterial toDomain() {
+                return null;
+            }
         }
     }
 
@@ -102,5 +112,8 @@ class RegisterPackagingMaterialTest {
         MaterialType(final String description) {
             this.description = description;
         }
+    }
+
+    private class PackageMaterialRepository {
     }
 }
