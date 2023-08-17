@@ -1,6 +1,7 @@
 package com.dope.wmsapp.location.domain;
 
 import com.dope.wmsapp.inbound.domain.LPN;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,7 +39,7 @@ public class Location {
     @Enumerated(EnumType.STRING)
     @Column(name = "usage_purpose", nullable = false)
     private UsagePurpose usagePurpose;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "location")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "location")
     private List<LocationLPN> locationLPNList = new ArrayList<>();
 
     public void setLocationLPNList(List<LocationLPN> locationLPNList) {
@@ -60,10 +61,6 @@ public class Location {
 
     public void assignNo(final Long locationNo) {
         this.locationNo = locationNo;
-    }
-
-    public Long getLocationNo() {
-        return locationNo;
     }
 
     public void assignLPN(final LPN lpn) {

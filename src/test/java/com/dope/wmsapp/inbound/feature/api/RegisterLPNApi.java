@@ -1,5 +1,6 @@
 package com.dope.wmsapp.inbound.feature.api;
 
+import com.dope.wmsapp.common.Scenario;
 import com.dope.wmsapp.inbound.feature.RegisterLPN;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class RegisterLPNApi {
     private Long inboundItemNo = 1L;
-    private String lpnBarcode = "LPN-0001";
+    private String lpnBarcode = "A-1-1";
     private LocalDateTime expirationAt = LocalDateTime.now().plusDays(1L);
 
     public RegisterLPNApi inboundItemNo(Long inboundItemNo) {
@@ -27,7 +28,7 @@ public class RegisterLPNApi {
         return this;
     }
 
-    public void request() {
+    public Scenario request() {
         RegisterLPN.Request request = new RegisterLPN.Request(
                 lpnBarcode,
                 expirationAt
@@ -39,5 +40,6 @@ public class RegisterLPNApi {
                 .post("/inbound/inbound-items/{inboundItemNo}/lpn", inboundItemNo)
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
+        return new Scenario();
     }
 }
